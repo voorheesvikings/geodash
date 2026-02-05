@@ -1,36 +1,34 @@
 import pygame
 
 # pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
-clock = pygame.time.Clock()
-pygame.display.set_caption("Geo Dash")
+
 running = True
 
-# Load the full-size background once
-bg = pygame.image.load("images/stereomadness_bg.jpeg").convert()
+class Game:
+    def __init__(self):
+        pygame.init()
 
-# Prepare a scaled background for the current window size
-current_bg = pygame.transform.smoothscale(bg, screen.get_size())
 
-while running:
-    # handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.VIDEORESIZE:
-            # recreate the display surface at the new size and update the scaled background
-            screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            current_bg = pygame.transform.smoothscale(bg, (event.w, event.h))
+        self.screen = pygame.display.set_mode((1920, 1080), pygame.RESIZABLE)
+        self.clock = pygame.time.Clock()
+        self.bg = pygame.image.load("images/stereomadness_bg.jpeg").convert()
+        current_bg = pygame.transform.smoothscale(self.bg, self.screen.get_size())
+        pygame.display.set_caption("Geo Dash")
 
-    # draw the (already-scaled) background to fill the window each frame
-    screen.blit(current_bg, (0, 0))
+    def run(self):
+        running = True
+        while running:
+            self.clock.tick(60)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.VIDEORESIZE:
+                    self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                    current_bg = pygame.transform.smoothscale(self.bg, (event.w, event.h))
 
-    # RENDER YOUR GAME HERE
+            self.screen.blit(current_bg, (0, 0))
+            self.clock.tick(60)
+            pygame.display.flip()
 
-    # update the display
-    pygame.display.flip()
+        pygame.quit()
 
-    clock.tick(60)  # limits FPS to 60
-
-pygame.quit()
